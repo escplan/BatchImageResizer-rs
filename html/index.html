@@ -1,0 +1,134 @@
+<div id="main-container">
+<div id="app-main" class="ui container">
+    <div class="ui four column grid">
+        <div class="row">
+            <div class="six wide column noselect" style="padding-right:0;">
+                <select class="ui format-mode dropdown" v-model="format">
+                    <option disabled value="">Format</option>
+                    <option value="jpg">To JPEG</option>
+                    <option value="png">To PNG</option>
+                </select>
+            </div>
+            <div class="column" style="padding-left:0.5em;" v-if="format == 'jpg'">
+                <div class="ui left labeled input" style="width:90%;">
+                    <div class="ui basic label noselect" style="">Quality</div>
+                    <input type="text" placeholder="Quality" v-model="quality" style="width:3.5em;">
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:-1.8em;">
+            <div class="six wide column" style="padding-right:0;">
+                <select class="ui format-mode dropdown" v-model="mode" v-on:change="checkmode">
+                    <option disabled value="">Mode</option>
+                    <option value="ByWidth">By Width</option>
+                    <option value="ByHeight">By Heigth</option>
+                    <option value="ByMaxSize">By Max Size</option>
+                    <option value="Percentage">Percentage</option>
+                </select>
+            </div>
+            <div class="column" style="padding-left: 0.5em;" v-if="mode == 'ByWidth'">
+                <div class="ui right labeled input" style="width:85%;">
+                    <input type="text" placeholder="W" v-model="width" type="number" style="padding-right:2px;">
+                    <div class="ui basic label" style="padding-left:2px;border-left:none;">px</div>
+                </div>
+            </div>
+            <div class="column" style="padding-left: 0.5em;" type="number" v-if="mode == 'ByHeight'">
+                <div class="ui right labeled input" style="width:85%;">
+                    <input type="text" placeholder="H" v-model="height" style="padding-right:2px;">
+                    <div class="ui basic label" style="padding-left:2px;border-left:none;">px</div>
+                </div>
+            </div>
+            <div class="column" style="padding-left: 0.5em;" type="number" v-if="mode == 'ByMaxSize'">
+                <div class="ui right labeled input" style="width:85%;">
+                    <input type="text" placeholder="Max" v-model="maxsize" style="padding-right:2px;">
+                    <div class="ui basic label" style="padding-left:2px;border-left:none;">px</div>
+                </div>
+            </div>
+            <div class="column" style="padding-left: 0.5em;" type="number" v-if="mode == 'Percentage'">
+                <div class="ui right labeled input" style="width:85%;">
+                    <input type="text" placeholder="Percent" v-model="percentage" style="padding-right:2px;">
+                    <div class="ui basic label" style="padding-left:2px;border-left:none;">%</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:-2em;">
+            <div class="sixteen wide column">
+                <div class="ui checkbox" id="donotenlager_div">
+                    <input type="checkbox" name="donotenlager" id="donotenlager" v-model="donotenlager" v-on:change="checkdonotenlager">
+                    <label style="color:#aaa; font-size:0.9em;">Don’t enlager images smaller than set size</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui one column grid">
+        <div class="column" style="padding-bottom:0.2em;">
+            <button class="ui tiny button" onclick="vue.openFolder()" :disabled="isButtonDisabled">Select Folder...</button>&nbsp;or&nbsp;
+            <button class="ui tiny button" onclick="vue.openMulti()" :disabled="isButtonDisabled">Open Files...</button>
+        </div>
+        <div class="column" style="padding-top:0.2em;">
+            <div class="ui checkbox">
+                <input type="checkbox" name="includesubfolder" v-model="includesubfolder" v-on:change="checksubfolder">
+                <label style="color:#aaa; font-size:0.9em;">Include subfolders</label>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui one column grid">
+        <div class="column" style="">
+            <button class="ui tiny button" onclick="vue.selectExportFolder()" :disabled="isButtonDisabled">Select Export Folder</button>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui one column grid">
+        <div class="column" style="padding-bottom: 0.2em;">
+            <button class="ui blue tiny button" onclick="vue.resize_sender()" id="resize_sender" :disabled="isResizeDisabled">Resize</button>
+            <div style="display:inline-block;  height: 20px; vertical-align:middle; overflow: hidden; width: 21em;">
+                <label style="font-weight:bold; color:green;margin:0 0.5em;">{{ isdone }}</label>
+                <label>{{ flashmsg }}</label>    
+            </div>
+        </div>
+        <!-- with display numbers of progress
+        <div class="column" style="padding-top:0.2em;">
+            <div class="ui small indicating progress" id="progress" data-value="0" data-total="1" style="margin-bottom: 0.2em;">
+              <div class="bar"><div class="progress"></div></div>
+            </div>
+        </div>
+        -->
+        <div class="column" style="padding-top:0.2em;padding-bottom:0.3em;">
+            <div class="ui tiny indicating progress" id="progress" data-value="0" data-total="1" style="margin-bottom: 0.2em;" :disabled="isProcessDisabled">
+                <div class="bar"></div>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui form" style="margin-top: -0.8em;">
+        <div class="field">
+            <label style="font-size: 1rem;">Info</label>
+        </div>
+    </div>
+    <div class="ui one column grid">
+        <div class="column" style="font-size: 0.92rem; padding-top:1em; padding-bottom:0.5em;">
+            <span style="color: #aaa;">Files:&nbsp;</span>
+            <span style="color: grey; font-weight: bold;">{{ filelistlen }} </span>
+
+            <span style="color: #aaa; margin-left:1em;">Success:&nbsp;</span>
+            <span style="font-weight: bold; color: green;">{{ process_n }} </span>
+            
+            <span style="color: #aaa; margin-left:1em;">Failures:&nbsp;</span>
+            <span style="font-weight: bold;color: red;">{{ failures }} </span><br />
+            <span style="color: #aaa;">From:&nbsp;</span><br />
+            <span class="textselect" style="color: #aaa; font-size: 0.8em; font-weight: bold;padding-left:1em;">{{ sourcefolder }}&nbsp;</span><br />
+            <span style="color: #aaa;">Export to:&nbsp;</span><br />
+            <span class="textselect" style="color: #aaa; font-size: 0.8em; font-weight: bold;padding-left:1em;">{{ exportfolder }}&nbsp;</span><br />
+        </div>
+        <div class="column">
+            <div class="ui form">
+                <div class="field">
+                    <textarea v-model="wvmessage" rows=12 style="resize:none;width:100%;font-size:0.9em;color:#777;border:0;" id="infotextarea" readonly="readonly"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,71 @@
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background-color: #F7F7F7;
+    font-size: 0.84em;
+    user-select: none;
+}
+
+/* remove bounce on scroll html body */
+/* https://stackoverflow.com/questions/21209223/remove-bounce-on-scroll-in-browser-issue-with-positionfixed-div */
+#main-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+}
+
+#main-container {
+    padding: 2.5em 1em 2.5em 1em;
+}
+
+input, textarea {
+    user-select: text;
+}
+
+.spaced.button {
+    margin-bottom: 1em;
+}
+
+/* ------------------ */
+/* some ui */
+.ui.format-mode{
+    width: 100%;
+    max-width: 100%;
+    min-width: 0px;
+}
+
+.ui.format-mode.selection.dropdown {
+  min-width: 0px;
+}
+
+.ui.checkbox label{
+    padding-left: 1.5em;
+}
+
+.ui.checkbox label:before {
+    top:2px;
+    width: 14px;
+    height: 14px;
+}
+
+.noselect, label, button, div {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.textselect {
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}

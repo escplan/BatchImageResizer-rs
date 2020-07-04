@@ -1,0 +1,30 @@
+[package]
+name = "batch_image_resizer-rs"
+version = "0.1.0"
+authors = ["martin <martin@esc.im>"]
+edition = "2018"
+description = "a batch image resizer with rust-lang"
+
+[package.metadata.bundle]
+name = "BatchImageResizer-rs"
+icon = ["images/32x32.png", "images/128x128.png", "images/512x512.png"]
+version = "0.1.0"
+copyright = "Copyright (c) martin@esc.im 2020. All rights reserved."
+category = "Photography"
+resources = ["assets", "images/*.png"]
+
+[dependencies]
+futures = "0.3"
+async-std = "1.6.2"
+rand = "0.7.3"
+libc = "0.2.69"
+num_cpus = { git="https://github.com/seanmonstar/num_cpus.git" }
+image = { git = "https://github.com/image-rs/image.git" }
+mozjpeg-sys = { git = "https://github.com/kornelski/mozjpeg-sys.git" }
+nfd = { git = "https://github.com/saurvs/nfd-rs.git" }
+
+# the version for mac copy/paste
+web-view = { git = "https://github.com/ravern/web-view" , features = ["edge"]}
+# the version for windows edge
+# web-view = { git = "https://github.com/Boscop/web-view.git", features = ["edge"] }
+
